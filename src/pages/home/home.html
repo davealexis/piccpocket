@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>PICC Pocket - Infusion Timer</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="home-page">
+    <ion-card>
+        <ion-card-content>
+            <div>
+                <p *ngIf="started">
+                    {{ counterMessage }}
+                </p>
+            </div>
+            <div>
+                <p>  {{ unitsMessage }}</p>
+            </div>
+            <div>
+                <p>
+                    {{ actionMessage }}&nbsp;
+                </p>
+            </div>
+            <div class="button-bar">
+                <button ion-button color="dark" large round *ngIf="started === false" (click)="start()">
+                    <ion-icon name="play"></ion-icon>
+                </button>
+                <button ion-button color="dark" large round *ngIf="started" (click)="pause()">
+                    <ion-icon name="pause" *ngIf="!paused"></ion-icon>
+                    <ion-icon name="play" *ngIf="paused"></ion-icon>
+                </button>
+                <button ion-button color="dark" large round *ngIf="started" (click)="cancel()">
+                    <ion-icon name="square"></ion-icon>
+                </button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
