@@ -10,9 +10,17 @@
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        white;
-$background-color:  royalblue;
+$text-color:        black;
+$background-color:  white;
 
+$primary-color-dark:   #1976D2;
+$primary-color:        #2196F3;
+$primary-color-light:  #BBDEFB;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #FF5722;
+$primary-text-color:   #212121;
+$secondary-text-color: #757575;
+$divider-color:        #BDBDBD;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -23,11 +31,11 @@ $background-color:  royalblue;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #387ef5,
-  secondary:  #32db64,
+  primary:    #2196F3,
+  secondary:  #FF5722,
   danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  light:      #BBDEFB,
+  dark:       #1976D2
 );
 
 
