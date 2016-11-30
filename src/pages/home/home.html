@@ -12,11 +12,25 @@
         <ion-card-content>
             <div>
                 <p *ngIf="started">
-                    {{ counterMessage }}
+                    <svg class="progress" width="120" height="120" viewBox="0 0 120 120">
+                        <circle class="progress__meter" cx="60" cy="60" r="54" stroke-width="12" />
+                        <circle class="progress__value" cx="60" cy="60" r="54" stroke-width="12" 
+                                [style.strokeDashoffset]="dashOffset"
+                                [style.strokeDasharray]="CIRCUMFERENCE" />
+
+                        <text id="counter-text" class="progress-text" 
+                            x="50%" y="70" text-anchor="middle" 
+                            font-size="68" font-family="sans-serif" 
+                            fill="silver" transform="rotate(90 55 55)"
+                            paint-order="stroke">
+                            {{countdownSecondsLeft}}
+                        </text>
+                    </svg>
                 </p>
             </div>
             <div>
-                <p>  {{ unitsMessage }}</p>
+                <p *ngIf="started">  {{ medUnitCounter }} {{ medUnitCounter === 1 ? 'unit' : 'units'}} left</p>
+                <p *ngIf="!started" class="instruction-msg">Press the Play button to start</p>
             </div>
             <div>
                 <p>
@@ -24,14 +38,14 @@
                 </p>
             </div>
             <div class="button-bar">
-                <button ion-button color="dark" large round *ngIf="started === false" (click)="start()">
+                <button ion-button color="dark" large *ngIf="started === false" (click)="start()">
                     <ion-icon name="play"></ion-icon>
                 </button>
-                <button ion-button color="dark" large round *ngIf="started" (click)="pause()">
+                <button ion-button color="dark" large *ngIf="started" (click)="pause()">
                     <ion-icon name="pause" *ngIf="!paused"></ion-icon>
                     <ion-icon name="play" *ngIf="paused"></ion-icon>
                 </button>
-                <button ion-button color="dark" large round *ngIf="started" (click)="cancel()">
+                <button ion-button color="dark" large *ngIf="started" (click)="cancel()">
                     <ion-icon name="square"></ion-icon>
                 </button>
             </div>

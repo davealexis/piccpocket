@@ -9,37 +9,52 @@ import { Vibration } from 'ionic-native';
 export class HomePage {
 
     counter: number = 0;
-    counterMessage: string = '';
     actionMessage: string = '';
-    unitsMessage: string = '';
+    //unitsMessage: string = '';
     started: boolean = false;
     paused: boolean = false;
 
-    medUnits: number = 0;
+    medUnits:number;
+    medUnitCounter: number = 0;
     totalPumpTimeInSeconds: number = 0;
     periodSeconds: number = 0;
     periodCounter: number = 0;
 
+    countdownMax:number = 100;
+    countdownSecondsRatio: number;
+    countdownSecondsLeft:number;
+    dashOffset:number;
+    RADIUS:number = 54;
+    CIRCUMFERENCE:number;
+
     constructor(public toastCtrl: ToastController) {
-        this.medUnits = 20;
+        this.medUnits = 20
+        this.medUnitCounter = this.medUnits;
         this.totalPumpTimeInSeconds = 60 * 12;
-        this.periodSeconds = Math.round(this.totalPumpTimeInSeconds / this.medUnits);
+        this.periodSeconds = Math.round(this.totalPumpTimeInSeconds / this.medUnitCounter);
         this.periodCounter = 0;
+
+        this.dashOffset = 100;
+        this.CIRCUMFERENCE = 2 * Math.PI * this.RADIUS;
+        this.setProgress(0);
     }
 
     start(): void {
         this.started = true;
         this.paused = false;
+        this.medUnitCounter = this.medUnits;
 
-        //let count = 0;
         let sound = new Audio('./assets/pump.wav');
         let endSound = new Audio('./assets/done.wav');
+        let getReadyCountdown = 5;
         sound.volume - 1.0;
 
-        this.actionMessage = this.unitsMessage = this.counterMessage = '';
-        this.showToast('Get Ready!');
+        this.countdownSecondsRatio = 100 / this.periodSeconds;
+        this.periodCounter = this.periodSeconds - getReadyCountdown;
 
-        this.periodCounter = this.periodSeconds - 5;
+        this.actionMessage = '';
+        this.showToast('Get Ready!');
+        this.setProgress(getReadyCountdown);
 
         let homeCtl = this;
 
@@ -50,33 +65,34 @@ export class HomePage {
                     return
                 }
 
-                homeCtl.periodCounter++;
+                homeCtl.periodCounter += 1;
 
+                homeCtl.countdownSecondsLeft = homeCtl.periodSeconds - homeCtl.periodCounter;
+
+                homeCtl.setProgress(homeCtl.countdownSecondsLeft);
+                
                 if (homeCtl.periodCounter === homeCtl.periodSeconds) {
-                    homeCtl.medUnits -= 1;
+                    homeCtl.medUnitCounter -= 1;
+                    sound.currentTime = 0;
                     sound.play();
                     homeCtl.actionMessage = 'PUMP!';
                     homeCtl.showToast('PUMP!');
                     Vibration.vibrate(1000);
                     
                     homeCtl.periodCounter = 0;
-                    sound.currentTime=0;
+
                     setTimeout(function() { homeCtl.actionMessage = ''; }, 2000);
                 }
 
-                homeCtl.counterMessage = (String)(homeCtl.periodSeconds - homeCtl.periodCounter);
-                homeCtl.unitsMessage = homeCtl.medUnits.toString() + ' units left';
-
-                if (homeCtl.medUnits === 0 || homeCtl.started == false) {
+                if (homeCtl.medUnitCounter === 0 || homeCtl.started == false) {
                     clearInterval(timer);
                     endSound.play();
-                    homeCtl.unitsMessage = '';
-                    homeCtl.counterMessage = 'Done';
                     
                     setTimeout(function() { 
                         homeCtl.started = false;
                     }, 2000);
                     
+                    homeCtl.setProgress(0);
                     homeCtl.showToast('Done');
                 }
             },
@@ -91,6 +107,8 @@ export class HomePage {
 
     cancel(): void {
         this.started = false;
+        this.paused = false;
+        this.actionMessage = '';
     }
 
     showToast(text: string): void {
@@ -102,5 +120,10 @@ export class HomePage {
         });
 
         toast.present();
+    }
+
+    setProgress(seconds:number): void {
+        let progress = (this.countdownSecondsRatio * seconds) / 100;
+        this.dashOffset = this.CIRCUMFERENCE * (1 - progress);
     }
 }
