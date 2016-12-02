@@ -1,48 +1,30 @@
-import { Component, ViewChild } from '@angular/core';
-
-import { Platform, MenuController, Nav } from 'ionic-angular';
-
+import { Component } from '@angular/core';
+import { Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
-
 import { HomePage } from '../pages/home/home';
-import { SettingsPage } from '../pages/settings/settings';
-
+import { SettingsService } from './settings.service';
 
 @Component({
-  templateUrl: 'app.html'
+    templateUrl: 'app.html',
+    providers: [ SettingsService ]
 })
-export class MyApp {
-  @ViewChild(Nav) nav: Nav;
 
-  // make HomePage the root (or first) page
-  rootPage: any = HomePage;
-  pages: Array<{title: string, component: any}>;
+export class MyApp {
+    // make HomePage the root (or first) page
+    rootPage: any = HomePage;
 
   constructor(
-    public platform: Platform,
-    public menu: MenuController
+      public platform: Platform,
+      public menu: MenuController
   ) {
-    this.initializeApp();
-
-    // set our app's pages
-    this.pages = [
-      { title: 'Infusion Timer', component: HomePage },
-      { title: 'Settings', component: SettingsPage }
-    ];
+      this.initializeApp();
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-    });
-  }
-
-  openPage(page) {
-    // close the menu when clicking a link from the menu
-    this.menu.close();
-    // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
+      this.platform.ready().then(() => {
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        StatusBar.styleDefault();
+      });
   }
 }

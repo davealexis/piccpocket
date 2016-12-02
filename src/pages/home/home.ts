@@ -1,21 +1,23 @@
 import { Component } from '@angular/core';
-import { ToastController } from 'ionic-angular';
-import { Vibration } from 'ionic-native';
+import { ToastController, NavController } from 'ionic-angular';
+
+//import { Vibration } from 'ionic-native';
+import { SettingsPage } from '../../pages/settings/settings';
+import { SettingsService } from '../../app/settings.service';
 
 @Component({
     templateUrl: 'home.html'
 })
 
 export class HomePage {
-
     counter: number = 0;
     actionMessage: string = '';
-    //unitsMessage: string = '';
     started: boolean = false;
     paused: boolean = false;
 
     medUnits:number;
     medUnitCounter: number = 0;
+    totalPumpTimeInMinutes: number;
     totalPumpTimeInSeconds: number = 0;
     periodSeconds: number = 0;
     periodCounter: number = 0;
@@ -27,10 +29,15 @@ export class HomePage {
     RADIUS:number = 54;
     CIRCUMFERENCE:number;
 
-    constructor(public toastCtrl: ToastController) {
-        this.medUnits = 20
+    constructor(
+        public toastCtrl: ToastController,
+        public nav: NavController,
+        private settingsService: SettingsService) {
+
+        this.medUnits = settingsService.medicationUnits;
         this.medUnitCounter = this.medUnits;
-        this.totalPumpTimeInSeconds = 60 * 12;
+        this.totalPumpTimeInMinutes = settingsService.infusionTimeInMinutes;
+        this.totalPumpTimeInSeconds = 60 * this.totalPumpTimeInMinutes;
         this.periodSeconds = Math.round(this.totalPumpTimeInSeconds / this.medUnitCounter);
         this.periodCounter = 0;
 
@@ -55,7 +62,8 @@ export class HomePage {
         this.actionMessage = '';
         this.showToast('Get Ready!');
         this.setProgress(getReadyCountdown);
-
+        this.countdownSecondsLeft = getReadyCountdown;
+        
         let homeCtl = this;
 
         // Time the rest of the pumps
@@ -66,22 +74,21 @@ export class HomePage {
                 }
 
                 homeCtl.periodCounter += 1;
-
                 homeCtl.countdownSecondsLeft = homeCtl.periodSeconds - homeCtl.periodCounter;
-
                 homeCtl.setProgress(homeCtl.countdownSecondsLeft);
                 
                 if (homeCtl.periodCounter === homeCtl.periodSeconds) {
                     homeCtl.medUnitCounter -= 1;
-                    sound.currentTime = 0;
-                    sound.play();
-                    homeCtl.actionMessage = 'PUMP!';
-                    homeCtl.showToast('PUMP!');
-                    Vibration.vibrate(1000);
-                    
                     homeCtl.periodCounter = 0;
 
-                    setTimeout(function() { homeCtl.actionMessage = ''; }, 2000);
+                    sound.currentTime = 0;
+                    sound.play();
+
+                    homeCtl.actionMessage = 'PUMP!';
+                    //Vibration.vibrate(1000);
+                    
+
+                    setTimeout(function() { homeCtl.actionMessage = ''; }, 3000);
                 }
 
                 if (homeCtl.medUnitCounter === 0 || homeCtl.started == false) {
@@ -90,7 +97,7 @@ export class HomePage {
                     
                     setTimeout(function() { 
                         homeCtl.started = false;
-                    }, 2000);
+                    }, 4000);
                     
                     homeCtl.setProgress(0);
                     homeCtl.showToast('Done');
@@ -125,5 +132,9 @@ export class HomePage {
     setProgress(seconds:number): void {
         let progress = (this.countdownSecondsRatio * seconds) / 100;
         this.dashOffset = this.CIRCUMFERENCE * (1 - progress);
+    }
+
+    openSettings():void {
+        this.nav.setRoot(SettingsPage);
     }
 }

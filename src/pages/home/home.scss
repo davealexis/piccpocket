@@ -1,14 +1,23 @@
 .home-page {
 
   p {
-    margin: 20px 0;
-    line-height: 22px;
+    margin: 2em;
+    line-height: 1em;
     font-size: 30pt;
     text-align: center;
   }
 
   .instruction-msg {
     font-size: 18pt;
+  }
+
+  .action-msg {
+    color: $primary-color-dark;
+    font-weight: bold;
+    font-size: 36pt;
+  }
+  .settings-msg {
+    font-size: 14pt;
   }
 
   .button-bar {

@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
+  <ion-navbar color="dark">
+    <button ion-button (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
     </button>
     <ion-title>PICC Pocket - Settings</ion-title>
   </ion-navbar>
@@ -13,13 +13,13 @@
   <h3>Settings</h3>
 
   <p>
-    Units
+    Units: {{ medUnits }}
   </p>
   <p>
-    Total Infusion Time
+    Total Infusion Time: {{ infusionTime }}
   </p>
-  <p>
-    <button ion-button color="primary" menuToggle>Toggle Menu</button>
-  </p>
+  <!--<p>
+    <button ion-button color="primary" (click)="goBack()">Toggle Menu</button>
+  </p>-->
 
 </ion-content>
