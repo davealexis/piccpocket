@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ToastController, NavController } from 'ionic-angular';
 
-//import { Vibration } from 'ionic-native';
+import { Vibration, Insomnia } from 'ionic-native';
+
 import { SettingsPage } from '../../pages/settings/settings';
 import { SettingsService } from '../../app/settings.service';
 
@@ -51,6 +52,8 @@ export class HomePage {
         this.paused = false;
         this.medUnitCounter = this.medUnits;
 
+        Insomnia.keepAwake();
+        
         let sound = new Audio('./assets/pump.wav');
         let endSound = new Audio('./assets/done.wav');
         let getReadyCountdown = 5;
@@ -85,8 +88,7 @@ export class HomePage {
                     homeCtl.periodCounter = 0;
 
                     homeCtl.actionMessage = 'PUMP!';
-                    //Vibration.vibrate(1000);
-                    
+                    Vibration.vibrate(1000);
 
                     setTimeout(function() { homeCtl.actionMessage = ''; }, 3000);
                 }
@@ -101,6 +103,7 @@ export class HomePage {
                     
                     homeCtl.setProgress(0);
                     homeCtl.showToast('Done');
+                    Insomnia.allowSleepAgain();
                 }
             },
             1000

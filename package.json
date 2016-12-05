@@ -34,8 +34,10 @@
     "cordova-plugin-statusbar",
     "cordova-plugin-device",
     "cordova-plugin-splashscreen",
+    "cordova-plugin-vibration",
+    "cordova-plugin-insomnia",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [],
-  "description": "testapp: An Ionic project"
+  "description": "A mobile application for managing your PICC medication infusions."
 }
