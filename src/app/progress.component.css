@@ -1,0 +1,51 @@
+.progress {
+    -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+    width: 200px;
+    height: 200px;
+}
+
+.progress_minor,
+.progress_major {
+    fill: white;
+}
+
+.progress_minor {
+    stroke: dodgerblue;
+    stroke-linecap: round;
+    stroke-width: 10;
+}
+
+.progress_major {
+    stroke: black;
+    stroke-linecap: round;
+    stroke-width: 15;
+}
+
+#progress-major-value-text {
+    text-anchor: middle;
+    font-size: 60pt;
+    font-family: sans-serif;
+    fill: black;
+}
+
+#progress-major-value-label {
+    text-anchor: middle;
+    font-size: 12pt;
+    font-family: sans-serif; 
+    fill: black;
+}
+
+#progress-minor-value-text {
+    text-anchor: middle;
+    font-size: 28pt;
+    font-family: sans-serif;
+    fill: dodgerblue;
+}
+
+#progress-minor-value-label {
+    text-anchor: middle;
+    font-size: 12pt;
+    font-family: sans-serif; 
+    fill: dodgerblue;
+}

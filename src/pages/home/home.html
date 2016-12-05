@@ -1,8 +1,5 @@
 <ion-header color="primary">
     <ion-navbar color="dark">
-        <!--<button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>-->
         <ion-title>PICC Pocket - Infusion Timer</ion-title>
     </ion-navbar>
 </ion-header>
@@ -27,27 +24,20 @@
         </p>
     </div>
 
+    <p> &nbsp; </p>
+    
     <div *ngIf="started">
         <p>
-            <svg class="progress" width="120" height="120" viewBox="0 0 120 120">
-                <circle class="progress__meter" cx="60" cy="60" r="54" stroke-width="12" />
-                <circle class="progress__value" cx="60" cy="60" r="54" stroke-width="12" 
-                        [style.strokeDashoffset]="dashOffset"
-                        [style.strokeDasharray]="CIRCUMFERENCE" />
-
-                <text id="counter-text" class="progress-text" 
-                    x="50%" y="70" text-anchor="middle" 
-                    font-size="68" font-family="sans-serif" 
-                    fill="black" transform="rotate(90 55 55)"
-                    paint-order="stroke">
-                    {{countdownSecondsLeft}}
-                </text>
-            </svg>
+            <progress-circle 
+                [minorMaxValue]="periodSeconds"
+                [majorMaxValue]="medUnits"
+                [minorValue]="countdownSecondsLeft" 
+                [majorValue]="medUnitCounter"></progress-circle>
         </p>
     </div>
-    <div>
+    <!--<div>
         <p *ngIf="started">  {{ medUnitCounter }} {{ medUnitCounter === 1 ? 'unit' : 'units'}} left</p>
-    </div>
+    </div>-->
     <div>
         <p class="action-msg">
             {{ actionMessage }}&nbsp;
@@ -59,9 +49,6 @@
 <ion-footer>
     <ion-toolbar>
         <div class="button-bar">
-            <!--<button ion-button color="dark" large *ngIf="started === false" (click)="start()">
-                <ion-icon name="play"></ion-icon>
-            </button>-->
             <button ion-button color="dark" large *ngIf="started" (click)="pause()">
                 <ion-icon name="pause" *ngIf="!paused"></ion-icon>
                 <ion-icon name="play" *ngIf="paused"></ion-icon>

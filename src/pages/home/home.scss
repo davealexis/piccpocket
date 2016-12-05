@@ -1,7 +1,7 @@
 .home-page {
 
   p {
-    margin: 2em;
+    margin: 1.5em;
     line-height: 1em;
     font-size: 30pt;
     text-align: center;
@@ -16,6 +16,7 @@
     font-weight: bold;
     font-size: 36pt;
   }
+
   .settings-msg {
     font-size: 14pt;
   }
@@ -26,5 +27,60 @@
 
   .toast {
     font-size: 28pt;
+  }
+
+  .progress {
+      -webkit-transform: rotate(-90deg);
+              transform: rotate(-90deg);
+      width: 200px;
+      height: 200px;
+  }
+
+  #progress_minor {
+    fill: silver;
+  }
+
+  #progress_major {
+      fill: white;
+  }
+
+  #progress_minor {
+      stroke: $primary-color-dark;
+      stroke-linecap: round;
+      stroke-width: 12;
+  }
+
+  #progress_major {
+      stroke: black;
+      stroke-linecap: round;
+      stroke-width: 15;
+  }
+
+  #progress-major-value-text {
+      text-anchor: middle;
+      font-size: 60pt;
+      font-family: sans-serif;
+      fill: black;
+  }
+
+  #progress-major-value-label {
+      text-anchor: middle;
+      font-size: 12pt;
+      font-family: sans-serif; 
+      fill: black;
+  }
+
+  #progress-minor-value-text {
+      text-anchor: middle;
+      font-size: 28pt;
+      font-family: sans-serif;
+      fill: $primary-color-dark;
+  }
+
+  #progress-minor-value-label {
+      text-anchor: middle;
+      font-size: 12pt;
+      font-family: sans-serif; 
+      fill: $primary-color-dark;
   }
 }

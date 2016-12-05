@@ -1,0 +1,21 @@
+<svg class="progress" viewBox="0 0 200 200">
+    <circle id="progress_minor" cx="100" cy="100" r="95" 
+            [attr.stroke-dasharray]="minorCircumference"
+            [attr.stroke-dashoffset]="minorDashOffset" />
+    <circle id="progress_major" cx="100" cy="100" r="80" 
+            [attr.stroke-dasharray]="majorCircumference"
+            [attr.stroke-dashoffset]="majorDashOffset" />
+
+    <text id="progress-major-value-text" x="100" y="10" transform="rotate(90 55 55)" paint-order="stroke">
+        {{ majorValue }}
+    </text>
+    <text id="progress-major-value-label" x="100" y="22" transform="rotate(90 55 55)" paint-order="stroke">
+        units
+    </text>
+    <text id="progress-minor-value-text" x="100" y="56" transform="rotate(90 55 55)" paint-order="stroke">
+        {{ minorValue }}
+    </text>
+    <text id="progress-minor-value-label" x="100" y="68" transform="rotate(90 55 55)" paint-order="stroke">
+        seconds
+    </text>
+</svg>
