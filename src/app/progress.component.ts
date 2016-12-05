@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, Input, SimpleChange } from '@angular/core';
 
 @Component({
     selector: 'progress-circle',
@@ -7,10 +7,10 @@ import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 
 export class ProgressComponent {
     private minorRadius:number = 95;
-    private minorCircumference:number = 2 * Math.PI * this.minorRadius;
+    minorCircumference:number = 2 * Math.PI * this.minorRadius;
 
     private majorRadius:number = 80;
-    private majorCircumference:number = 2 * Math.PI * this.majorRadius;
+    majorCircumference:number = 2 * Math.PI * this.majorRadius;
 
     @Input() minorMaxValue:number;
     @Input() majorMaxValue:number;
@@ -21,8 +21,8 @@ export class ProgressComponent {
     private majorDecrement:number;
     private minorDecrement:number;
 
-    private minorDashOffset:number;
-    private majorDashOffset:number;
+    minorDashOffset:number;
+    majorDashOffset:number;
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         this.minorDecrement = 100 / this.minorMaxValue;
@@ -33,19 +33,6 @@ export class ProgressComponent {
         this.majorDecrement = 100 / this.majorMaxValue;
         let majorProgress = (this.majorDecrement * this.majorValue) / 100;
         this.majorDashOffset = this.majorCircumference * (1 - majorProgress);
-
-        console.log('MAJOR - max: ' + this.majorMaxValue + 
-            ',  value: ' + this.majorValue + 
-            ', Offset: ' + this.majorDashOffset + 
-            ', decrement: ' + this.majorDecrement,
-            ', circ: ' + this.majorCircumference +
-            ', radius: ' + this.majorRadius);
-        console.log('MINOR - max: ' + this.minorMaxValue + 
-            ',  value: ' + this.minorValue + 
-            ', Offset: ' + this.minorDashOffset + 
-            ', decrement: ' + this.minorDecrement,
-            ', circ: ' + this.minorCircumference +
-            ', radius: ' + this.minorRadius);
     }
 
 

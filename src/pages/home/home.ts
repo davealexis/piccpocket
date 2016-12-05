@@ -4,7 +4,6 @@ import { ToastController, NavController } from 'ionic-angular';
 //import { Vibration } from 'ionic-native';
 import { SettingsPage } from '../../pages/settings/settings';
 import { SettingsService } from '../../app/settings.service';
-import { ProgressComponent } from '../../app/progress.component';
 
 @Component({
     templateUrl: 'home.html'
