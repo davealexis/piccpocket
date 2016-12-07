@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastController, NavController } from 'ionic-angular';
+import { ToastController, NavController, Events, Platform } from 'ionic-angular';
 
 import { Vibration, Insomnia } from 'ionic-native';
 
@@ -30,34 +30,52 @@ export class HomePage {
     RADIUS:number = 54;
     CIRCUMFERENCE:number;
 
+    private isMobile: boolean;
+
+    vibrationEnabled: boolean = false;
+    soundEnabled: boolean = false;
+
     constructor(
         public toastCtrl: ToastController,
         public nav: NavController,
-        private settingsService: SettingsService) {
+        private settingsService: SettingsService,
+        private platform: Platform,
+        events: Events) {
 
-        this.medUnits = settingsService.medicationUnits;
-        this.medUnitCounter = this.medUnits;
-        this.totalPumpTimeInMinutes = settingsService.infusionTimeInMinutes;
-        this.totalPumpTimeInSeconds = 60 * this.totalPumpTimeInMinutes;
-        this.periodSeconds = Math.round(this.totalPumpTimeInSeconds / this.medUnitCounter);
+        this.loadSettings();
+
         this.periodCounter = 0;
 
         this.dashOffset = 100;
         this.CIRCUMFERENCE = 2 * Math.PI * this.RADIUS;
         this.setProgress(0);
+
+        this.isMobile = platform.is('android') || platform.is('ios');
+
+        events.subscribe(
+            'settings-changed',
+            () => {
+                this.loadSettings();
+            });
     }
 
     start(): void {
+        let sound = new Audio('./assets/pump.wav');
+        let endSound = new Audio('./assets/done.wav');
+
+        this.loadSettings();
+
         this.started = true;
         this.paused = false;
         this.medUnitCounter = this.medUnits;
 
         Insomnia.keepAwake();
         
-        let sound = new Audio('./assets/pump.wav');
-        let endSound = new Audio('./assets/done.wav');
         let getReadyCountdown = 5;
-        sound.volume - 1.0;
+
+        if (this.soundEnabled === true) {
+            sound.volume = 1.0;
+        }
 
         this.countdownSecondsRatio = 100 / this.periodSeconds;
         this.periodCounter = this.periodSeconds - getReadyCountdown;
@@ -81,29 +99,40 @@ export class HomePage {
                 homeCtl.setProgress(homeCtl.countdownSecondsLeft);
                 
                 if (homeCtl.periodCounter === homeCtl.periodSeconds) {
-                    sound.currentTime = 0;
-                    sound.play();
+                    if (homeCtl.soundEnabled) {
+                        sound.currentTime = 0;
+                        sound.play();
+                    }
 
                     homeCtl.medUnitCounter -= 1;
                     homeCtl.periodCounter = 0;
 
                     homeCtl.actionMessage = 'PUMP!';
-                    Vibration.vibrate(1000);
+
+                    if (homeCtl.vibrationEnabled) {
+                        Vibration.vibrate(1000);
+                    }
 
                     setTimeout(function() { homeCtl.actionMessage = ''; }, 3000);
                 }
 
                 if (homeCtl.medUnitCounter === 0 || homeCtl.started == false) {
                     clearInterval(timer);
-                    endSound.play();
-                    
+
+                    if (homeCtl.soundEnabled) {
+                        endSound.play();
+                    }
+
                     setTimeout(function() { 
                         homeCtl.started = false;
                     }, 4000);
                     
                     homeCtl.setProgress(0);
                     homeCtl.showToast('Done');
-                    Insomnia.allowSleepAgain();
+
+                    if (homeCtl.isMobile) {
+                        Insomnia.allowSleepAgain();
+                    }
                 }
             },
             1000
@@ -138,6 +167,17 @@ export class HomePage {
     }
 
     openSettings():void {
-        this.nav.setRoot(SettingsPage);
+        this.nav.push(SettingsPage);
+    }
+
+    loadSettings(): void {
+        this.medUnits = this.settingsService.medicationUnits;
+        this.totalPumpTimeInMinutes = this.settingsService.infusionTimeInMinutes;
+        this.vibrationEnabled = this.settingsService.vibrationEnabled;
+        this.soundEnabled = this.settingsService.soundEnabled;
+        
+        this.medUnitCounter = this.medUnits;
+        this.totalPumpTimeInSeconds = 60 * this.totalPumpTimeInMinutes;
+        this.periodSeconds = Math.round(this.totalPumpTimeInSeconds / this.medUnitCounter);
     }
 }

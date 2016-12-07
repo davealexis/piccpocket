@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { HomePage } from '../home/home';
+import { NavController, Events } from 'ionic-angular';
 import { SettingsService } from '../../app/settings.service';
 
 @Component({
@@ -9,20 +8,14 @@ import { SettingsService } from '../../app/settings.service';
 
 export class SettingsPage {
 
-    infusionTime:number;
-    medUnits:number;
-
     constructor(
         public nav: NavController,
-        private settingsService: SettingsService) {
-            console.log('Infustion Time: ' + settingsService.infusionTimeInMinutes);
-
-            this.infusionTime = settingsService.infusionTimeInMinutes;
-            this.medUnits = settingsService.medicationUnits;
-            settingsService.infusionTimeInMinutes = 15;
+        public settings: SettingsService,
+        private events: Events) {
         }
 
-    goBack(): void {
-        this.nav.setRoot(HomePage)
+    ionViewWillLeave(){
+        this.events.publish('settings-changed');
     }
+
 }
