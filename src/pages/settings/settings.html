@@ -1,50 +1,59 @@
 <ion-header>
     <ion-navbar color="dark">
-        <!--<button ion-button (click)="goBack()">
-          <ion-icon name="arrow-back"></ion-icon>
-        </button>-->
         <ion-title>PICC Pocket - Settings</ion-title>
     </ion-navbar>
 </ion-header>
 
+<ion-content>
+    <h1 *ngIf="!ready">Loading...</h1>
 
-<ion-content padding>
+    <div *ngIf="!isInitialized">
+        <h3 color="accent">
+            It looks like this is the first time the app is being run.
+            Please provide the medication units and infusion time so that the infusion
+            timing can be calculated.
+        </h3>
+    </div>
 
-    <ion-list>
-        <ion-list-header>
-            Timer Settings
-        </ion-list-header>
-
+    <div *ngIf="ready">
         <ion-item>
-            <ion-label>Units of medicine <ion-badge right>{{ settings.medicationUnits }}</ion-badge></ion-label>
-            <ion-range min="5" max="100" [(ngModel)]="settings.medicationUnits" color="primary">
+            <ion-label>
+                Units of medicine
+                <ion-badge item-right>{{ settingsData.medicationUnits }}</ion-badge>
+            </ion-label>
+            
+            <ion-range no-padding no-margin pin min="5" max="100" [(ngModel)]="settingsData.medicationUnits" color="primary">
                 <ion-label range-left>5</ion-label>
                 <ion-label range-right>100</ion-label>
+                <ion-label left>test</ion-label>
             </ion-range>
         </ion-item>
 
         <ion-item>
-            <ion-label>Infusion Time in Minutes <ion-badge item-right>{{ settings.infusionTimeInMinutes }}</ion-badge></ion-label>
-            <ion-range min="1" max="60" [(ngModel)]="settings.infusionTimeInMinutes" color="primary">
+            <ion-label>
+                Infusion Time in Minutes 
+                <ion-badge item-right>{{ settingsData.infusionTimeInMinutes }}</ion-badge>
+            </ion-label>
+            <ion-range min="1" max="60" [(ngModel)]="settingsData.infusionTimeInMinutes" color="primary" no-padding>
                 <ion-label range-left>1</ion-label>
                 <ion-label range-right>60</ion-label>
             </ion-range>
         </ion-item>
-        
-        <ion-list-header>
-            Notification Settings
-        </ion-list-header>
 
-        
         <ion-item>
             <ion-label>Enable vibration alerts</ion-label>
-            <ion-toggle [(ngModel)]="settings.vibrationEnabled"></ion-toggle>
+            <ion-toggle [(ngModel)]="settingsData.vibrationEnabled"></ion-toggle>
         </ion-item>
 
         <ion-item>
             <ion-label>Enable sound alerts</ion-label>
-            <ion-toggle [(ngModel)]="settings.soundEnabled"></ion-toggle>
+            <ion-toggle [(ngModel)]="settingsData.soundEnabled"></ion-toggle>
         </ion-item>
-    </ion-list>
+
+        <ion-item>
+            <ion-label>Prevent device from sleeping</ion-label>
+            <ion-toggle [(ngModel)]="settingsData.keepAwake"></ion-toggle>
+        </ion-item>
+    </div>
 
 </ion-content>

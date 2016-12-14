@@ -11,18 +11,22 @@ import { SettingsService } from '../../app/settings.service';
 })
 
 export class HomePage {
+    // From settings/preferences
+    medUnits:number;
+    totalPumpTimeInMinutes: number;
+    vibrationEnabled: boolean;
+    soundEnabled: boolean;
+    keepAwake: boolean;
+
+    // Internal operations
     counter: number = 0;
     actionMessage: string = '';
     started: boolean = false;
     paused: boolean = false;
-
-    medUnits:number;
     medUnitCounter: number = 0;
-    totalPumpTimeInMinutes: number;
     totalPumpTimeInSeconds: number = 0;
     periodSeconds: number = 0;
     periodCounter: number = 0;
-
     countdownMax:number = 100;
     countdownSecondsRatio: number;
     countdownSecondsLeft:number;
@@ -31,9 +35,6 @@ export class HomePage {
     CIRCUMFERENCE:number;
 
     private isMobile: boolean;
-
-    vibrationEnabled: boolean = false;
-    soundEnabled: boolean = false;
 
     constructor(
         public toastCtrl: ToastController,
@@ -69,8 +70,10 @@ export class HomePage {
         this.paused = false;
         this.medUnitCounter = this.medUnits;
 
-        Insomnia.keepAwake();
-        
+        if (this.isMobile && this.keepAwake) {
+            Insomnia.keepAwake();
+        }
+
         let getReadyCountdown = 5;
 
         if (this.soundEnabled === true) {
@@ -87,7 +90,7 @@ export class HomePage {
         
         let homeCtl = this;
 
-        // Time the rest of the pumps
+        // Start timing the infusions
         let timer = setInterval(
             function() {
                 if (homeCtl.paused) {
@@ -107,7 +110,7 @@ export class HomePage {
                     homeCtl.medUnitCounter -= 1;
                     homeCtl.periodCounter = 0;
 
-                    homeCtl.actionMessage = 'PUMP!';
+                    homeCtl.actionMessage = 'PUMP';
 
                     if (homeCtl.vibrationEnabled) {
                         Vibration.vibrate(1000);
@@ -130,7 +133,7 @@ export class HomePage {
                     homeCtl.setProgress(0);
                     homeCtl.showToast('Done');
 
-                    if (homeCtl.isMobile) {
+                    if (homeCtl.isMobile && homeCtl.keepAwake) {
                         Insomnia.allowSleepAgain();
                     }
                 }
@@ -171,11 +174,19 @@ export class HomePage {
     }
 
     loadSettings(): void {
-        this.medUnits = this.settingsService.medicationUnits;
-        this.totalPumpTimeInMinutes = this.settingsService.infusionTimeInMinutes;
-        this.vibrationEnabled = this.settingsService.vibrationEnabled;
-        this.soundEnabled = this.settingsService.soundEnabled;
-        
+        if (!this.settingsService.isInitialized) {
+            this.nav.push(SettingsPage);
+            return;
+        }
+
+        let settingsData = this.settingsService.get();
+
+        this.medUnits = settingsData.medicationUnits;
+        this.totalPumpTimeInMinutes = settingsData.infusionTimeInMinutes;
+        this.vibrationEnabled = settingsData.vibrationEnabled;
+        this.soundEnabled = settingsData.soundEnabled;
+        this.keepAwake = settingsData.keepAwake;
+
         this.medUnitCounter = this.medUnits;
         this.totalPumpTimeInSeconds = 60 * this.totalPumpTimeInMinutes;
         this.periodSeconds = Math.round(this.totalPumpTimeInSeconds / this.medUnitCounter);

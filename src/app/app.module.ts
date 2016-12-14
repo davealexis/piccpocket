@@ -4,6 +4,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
 import { ProgressComponent } from './progress.component';
+import { Storage } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,6 @@ import { ProgressComponent } from './progress.component';
     HomePage,
     SettingsPage
   ],
-  providers: [ ]
+  providers: [ Storage ]
 })
 export class AppModule {}
