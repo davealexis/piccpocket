@@ -43,7 +43,12 @@ export class HomePage {
         private platform: Platform,
         events: Events) {
 
-        this.loadSettings();
+        events.subscribe(
+                'settings-loaded',
+                () => {
+                    events.unsubscribe('settings-loaded');
+                    this.loadSettings();
+                });
 
         this.periodCounter = 0;
 

@@ -19,8 +19,7 @@ export class SettingsService {
             storage.get('settings')
                 .then(
                     data => {
-                        this.settingsData = data;
-
+                        this.settingsData = data;                        
                         this.isInitialized = data !== null;
                         
                         if (!this.isInitialized) {
