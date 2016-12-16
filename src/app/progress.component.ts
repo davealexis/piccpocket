@@ -2,7 +2,22 @@ import { Component, Input, SimpleChange } from '@angular/core';
 
 @Component({
     selector: 'progress-circle',
-    templateUrl: './progress.component.html'
+    templateUrl: './progress.component.html',
+    styles: [ `.scaling-svg-container {
+ position: relative; 
+ height: 0; 
+ width: 100%; 
+ padding: 0;
+ padding-bottom: calc(50vh); 
+ /* override this inline for aspect ratio other than square */
+}
+.scaling-svg {
+ position: absolute; 
+ height: 100%; 
+ width: 100%; 
+ top: 0;
+ left: 0;
+}`]
 })
 
 export class ProgressComponent {

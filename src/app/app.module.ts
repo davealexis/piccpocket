@@ -24,4 +24,5 @@ import { Storage } from '@ionic/storage';
   ],
   providers: [ Storage ]
 })
+
 export class AppModule {}

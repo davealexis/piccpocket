@@ -23,17 +23,14 @@
             </button>
         </p>
     </div>
-
-    <!--<p> &nbsp; </p>-->
     
     <div *ngIf="started">
-        <p>
-            <progress-circle 
-                [minorMaxValue]="periodSeconds"
-                [majorMaxValue]="medUnits"
-                [minorValue]="countdownSecondsLeft" 
-                [majorValue]="medUnitCounter"></progress-circle>
-        </p>
+        <progress-circle 
+            [minorMaxValue]="periodSeconds"
+            [majorMaxValue]="medUnits"
+            [minorValue]="countdownSecondsLeft" 
+            [majorValue]="medUnitCounter"
+            item-width="90%"></progress-circle>
     </div>
 
     <div>

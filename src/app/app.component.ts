@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform, MenuController } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
+import { StatusBar, ScreenOrientation, Insomnia } from 'ionic-native';
 import { HomePage } from '../pages/home/home';
 import { SettingsService } from './settings.service';
 
@@ -25,6 +25,14 @@ export class MyApp {
         // Okay, so the platform is ready and our plugins are available.
         // Here you can do any higher level native things you might need.
         StatusBar.styleDefault();
+
+        this.platform.pause.subscribe(
+            () => {
+                ScreenOrientation.unlockOrientation();
+                Insomnia.allowSleepAgain();
+                this.platform.exitApp();
+            }
+        );
       });
   }
 }

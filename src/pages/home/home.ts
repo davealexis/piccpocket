@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToastController, NavController, Events, Platform } from 'ionic-angular';
 
-import { Vibration, Insomnia } from 'ionic-native';
+import { Vibration, Insomnia, ScreenOrientation } from 'ionic-native';
 
 import { SettingsPage } from '../../pages/settings/settings';
 import { SettingsService } from '../../app/settings.service';
@@ -42,7 +42,7 @@ export class HomePage {
         private settingsService: SettingsService,
         private platform: Platform,
         events: Events) {
-
+        
         events.subscribe(
                 'settings-loaded',
                 () => {
@@ -75,8 +75,12 @@ export class HomePage {
         this.paused = false;
         this.medUnitCounter = this.medUnits;
 
-        if (this.isMobile && this.keepAwake) {
-            Insomnia.keepAwake();
+        if (this.isMobile) {
+            if (this.keepAwake) {
+                Insomnia.keepAwake();
+            }
+
+            ScreenOrientation.lockOrientation('portrait');
         }
 
         let getReadyCountdown = 5;
@@ -140,6 +144,7 @@ export class HomePage {
 
                     if (homeCtl.isMobile && homeCtl.keepAwake) {
                         Insomnia.allowSleepAgain();
+                        ScreenOrientation.unlockOrientation();
                     }
                 }
             },

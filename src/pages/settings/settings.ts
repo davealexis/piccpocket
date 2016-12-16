@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, Events, Platform } from 'ionic-angular';
 import { SettingsService } from '../../app/settings.service';
 import { SettingsData } from '../../app/settingsData'
 
@@ -22,7 +22,8 @@ export class SettingsPage {
     constructor(
         public nav: NavController,
         public settings: SettingsService,
-        private events: Events) {
+        private events: Events,
+        private platform: Platform) {
             events.subscribe(
                 'settings-loaded',
                 () => {
@@ -43,6 +44,12 @@ export class SettingsPage {
                     keepAwake: false
                 };
             }
+
+            platform.registerBackButtonAction(
+                () => {
+                    this.ionViewWillLeave();                
+                }
+            )
         }
 
     ionViewWillLeave(){
